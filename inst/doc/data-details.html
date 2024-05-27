@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Gathering data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Gathering data</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This vignette describes traffic data from Telraam sensors and how to
+get access to specific data.</p>
+<p>Before we go on, we’ll attach the packages we use.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(telraamStats)</span></code></pre></div>
+<div id="telraam" class="section level3">
+<h3>Telraam</h3>
+<p><a href="https://telraam.net/en/what-is-telraam">Telraam</a> is a
+Belgian company that develops sensors for monitoring and collecting
+multi-modal traffic data. These sensors are equipped with cameras to
+count road users using various mode of transport, including pedestrian,
+cyclists, cars and heavy vehicles.</p>
+<p>A diverse range of stakeholders (individuals, community groups, local
+authoritieds, researchers…) can purchase and install a Telraam sensor on
+their buildings. A map of all sensors is available on <a href="https://telraam.net/">Telraam website</a>. Everyone can access the
+data through the web interface (<a href="https://telraam.net/en/location/9000001844">example</a>) or the <a href="https://telraam-api.net/">API</a>.</p>
+<div id="available-data" class="section level4">
+<h4>Available data</h4>
+<p>The Telraam API provides information on road segments and sensors
+locations, or parameters, but most importantly, it offers traffic data.
+Every hour, each sensor sends information on traffic counts, for each
+transportation mode and road direction, along with a confidence metric.
+In addition to traffic counts, estimated car speed and a car speed
+histogram are also available. Further details on the data will be
+provided in this vignette.</p>
+</div>
+</div>
+<div id="included-dataset" class="section level3">
+<h3>Included dataset</h3>
+<p>If you’re only interested on discovering Telraam data and playing
+with real traffic data, a dataset of two road segments in the city of
+Châteaubourg (FR) is included in the package.</p>
+<p>Châteaubourg is a municipality in Brittany, northwestern France. Its
+population is around 7,500 inhabitants and its area is less than
+30km<span class="math inline">\(^2\)</span>. In France, it is the city
+with the largest number of Telraam sensors in 2023 and by far the
+highest density of sensors.</p>
+<p>The two road segments offer hourly data from January 1, 2022, to
+December 31, 2022. The data is directly extracted from the API and may
+contain missing or extreme values.</p>
+<div id="load-included-dataset" class="section level4">
+<h4>Load included dataset</h4>
+<p>Included dataset is lazily loaded with the telraamStats package. If
+you have already called <code>library(telraamStats)</code>, the dataset
+is already attached and you can call it directly :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(traffic)</span></code></pre></div>
+<table>
+<colgroup>
+<col width="2%" />
+<col width="6%" />
+<col width="2%" />
+<col width="5%" />
+<col width="2%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="1%" />
+<col width="2%" />
+<col width="2%" />
+<col width="2%" />
+<col width="1%" />
+<col width="1%" />
+<col width="2%" />
+<col width="2%" />
+<col width="3%" />
+<col width="3%" />
+<col width="2%" />
+<col width="6%" />
+<col width="18%" />
+<col width="3%" />
+<col width="0%" />
+<col width="2%" />
+<col width="1%" />
+<col width="2%" />
+<col width="1%" />
+<col width="4%" />
+<col width="3%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">instance_id</th>
+<th align="left">segment_fullname</th>
+<th align="right">segment_id</th>
+<th align="left">date</th>
+<th align="left">interval</th>
+<th align="right">uptime</th>
+<th align="right">heavy</th>
+<th align="right">car</th>
+<th align="right">bike</th>
+<th align="right">pedestrian</th>
+<th align="right">heavy_lft</th>
+<th align="right">heavy_rgt</th>
+<th align="right">car_lft</th>
+<th align="right">car_rgt</th>
+<th align="right">bike_lft</th>
+<th align="right">bike_rgt</th>
+<th align="right">pedestrian_lft</th>
+<th align="right">pedestrian_rgt</th>
+<th align="right">direction</th>
+<th align="left">car_speed_hist_0to70plus</th>
+<th align="left">car_speed_hist_0to120plus</th>
+<th align="left">timezone</th>
+<th align="right">v85</th>
+<th align="left">day</th>
+<th align="right">hour</th>
+<th align="left">weekday</th>
+<th align="left">holiday</th>
+<th align="left">vacation</th>
+<th align="left">segment_name</th>
+<th align="left">uptime_quality</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-1</td>
+<td align="left">9000001844 - RteVitre-06</td>
+<td align="right">9000001844</td>
+<td align="left">2022-01-01 01:00:00 CET</td>
+<td align="left">hourly</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">Europe/Paris</td>
+<td align="right">NA</td>
+<td align="left">2022-01-01</td>
+<td align="right">1</td>
+<td align="left">saturday</td>
+<td align="left">TRUE</td>
+<td align="left">Vacances de Noël</td>
+<td align="left">RteVitre-06</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="right">-1</td>
+<td align="left">9000001844 - RteVitre-06</td>
+<td align="right">9000001844</td>
+<td align="left">2022-01-01 02:00:00 CET</td>
+<td align="left">hourly</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">Europe/Paris</td>
+<td align="right">NA</td>
+<td align="left">2022-01-01</td>
+<td align="right">2</td>
+<td align="left">saturday</td>
+<td align="left">TRUE</td>
+<td align="left">Vacances de Noël</td>
+<td align="left">RteVitre-06</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="right">-1</td>
+<td align="left">9000001844 - RteVitre-06</td>
+<td align="right">9000001844</td>
+<td align="left">2022-01-01 03:00:00 CET</td>
+<td align="left">hourly</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">Europe/Paris</td>
+<td align="right">NA</td>
+<td align="left">2022-01-01</td>
+<td align="right">3</td>
+<td align="left">saturday</td>
+<td align="left">TRUE</td>
+<td align="left">Vacances de Noël</td>
+<td align="left">RteVitre-06</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="right">-1</td>
+<td align="left">9000001844 - RteVitre-06</td>
+<td align="right">9000001844</td>
+<td align="left">2022-01-01 04:00:00 CET</td>
+<td align="left">hourly</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">Europe/Paris</td>
+<td align="right">NA</td>
+<td align="left">2022-01-01</td>
+<td align="right">4</td>
+<td align="left">saturday</td>
+<td align="left">TRUE</td>
+<td align="left">Vacances de Noël</td>
+<td align="left">RteVitre-06</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="right">-1</td>
+<td align="left">9000001844 - RteVitre-06</td>
+<td align="right">9000001844</td>
+<td align="left">2022-01-01 05:00:00 CET</td>
+<td align="left">hourly</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">Europe/Paris</td>
+<td align="right">NA</td>
+<td align="left">2022-01-01</td>
+<td align="right">5</td>
+<td align="left">saturday</td>
+<td align="left">TRUE</td>
+<td align="left">Vacances de Noël</td>
+<td align="left">RteVitre-06</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="right">-1</td>
+<td align="left">9000001844 - RteVitre-06</td>
+<td align="right">9000001844</td>
+<td align="left">2022-01-01 06:00:00 CET</td>
+<td align="left">hourly</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0</td>
+<td align="left">Europe/Paris</td>
+<td align="right">NA</td>
+<td align="left">2022-01-01</td>
+<td align="right">6</td>
+<td align="left">saturday</td>
+<td align="left">TRUE</td>
+<td align="left">Vacances de Noël</td>
+<td align="left">RteVitre-06</td>
+<td align="left">FALSE</td>
+</tr>
+</tbody>
+</table>
+<p>Otherwise, if you don’t want to load the entire package, you can also
+access this dataset by using <code>telraamStats::traffic</code>.</p>
+</div>
+</div>
+<div id="retrieve-data-from-a-specific-road-segment-or-set-of-segments" class="section level3">
+<h3>Retrieve data from a specific road segment or set of segments</h3>
+<div id="obtain-a-telraam-token" class="section level4">
+<h4>1. Obtain a Telraam token</h4>
+<p>To work with data from one sensor - or more -, you must first create
+a <a href="https://telraam.net/en/register">Telraam (free) account</a>
+to obtain an API token. The API token serves as a unique identifier for
+accessing the Telraam API service, which is used in this package. You
+can generate it in your personal dashboard on the Telraam website. For
+more information about the Telraam API, refer to the <a href="https://talks.telraam.net/t/telraam-api-even-more-data-statistics/79">Telraam
+Q&amp;A website</a>.</p>
+</div>
+<div id="specify-your-token-in-configuration" class="section level4">
+<h4>2. Specify your token in configuration</h4>
+<p>It is strongly recommended not to directly embed your token in the
+code, especially if the code is shared or versioned using a system like
+Git.</p>
+<p>You have two options to specify your own Telraam token :</p>
+<ol style="list-style-type: decimal">
+<li>Edit your <code>.Renviron</code> file. <code>.Renviron</code> is
+useful for defining sensitive information or R environment variables: it
+contains a list of environment variables to set. An easy way to edit
+this file and add your Telraam token is by using the
+<code>usethis</code> package. Run the following command (either once or
+every time you change your API Token) : <code>.Renviron</code> file will
+open in RStudio and you can add a new line in the form
+<code>token=&#39;YourTelraamAPIToken&#39;</code>.</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;usethis&quot;</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;usethis&quot;</span>) <span class="co">#if you haven&#39;t installed &#39;usethis&#39; already</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_environ</span>()</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>If you are not comfortable with the previous step, you can use an
+built-in function of the <code>telraamStats</code> package. However,
+keep in mind that you will need to run this function every time you want
+to retrieve your data:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">set_telraam_token</span>(<span class="at">token =</span> <span class="st">&#39;YourTelraamAPIToken&#39;</span>)</span></code></pre></div>
+<p>If you want to verify that your token is correctly set, you can use
+the following command :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">get_telraam_token</span>()</span></code></pre></div>
+</div>
+<div id="specify-road-segment-ids-in-configuration-file" class="section level4">
+<h4>3. Specify road segment IDs in configuration file</h4>
+<p>Each road segment has a unique ID, which can be found in the Telraam
+location URL. For instance, here is the URL for one of Châteaubourg’s
+segments <a href="https://telraam.net/home/location/9000005665"><code>https://telraam.net/home/location/9000005665</code></a>,
+and its ID is located in the last part of the URL
+(<code>9000005665</code>). Once you have gathered the IDs for all your
+segments, you can specify them by editing the
+<code>inst\config.yml</code> file.</p>
+<p>This file can be created using the <code>create_config()</code>
+function. Once executed, you find a <code>config.yml</code> file in the
+<code>inst\</code> folder of your work directory.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">create_config</span>(<span class="at">create_directory =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The file already contains the following template, which you can
+modify (directly in the yml file) to add your own segments, adhering to
+the format of the template, that is, segment name (without quotes),
+followed by a colon, then the segment number within quotes :
+<code>segmentName: &#39;9000000000&#39;</code>.</p>
+<pre><code>default:
+  url: https://telraam-api.net/v1
+  segments:
+    segment-01: &#39;9000000000&#39;
+    segment-02: &#39;9000000000&#39;</code></pre>
+<p>You can specify as many segments as you want and personalize the
+segment’s names.</p>
+<pre><code>default:
+  url: https://telraam-api.net/v1
+  segments:
+    MyFirstSegment: &#39;9000000000&#39;
+    My-second-segment: &#39;9000000000&#39;
+    My_3rd_segment: &#39;9000000000&#39;</code></pre>
+<p>If you don’t want to create a folder in your project directory,
+another option is to use a temporary folder and specify your segments
+names and IDs directly through the <code>create_config()</code>
+function, but you will have to re-run this command at each session.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>list_of_segments <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&quot;Burel&quot;</span><span class="ot">=</span> <span class="st">&quot;9000002156&quot;</span>, <span class="st">&quot;Vitre&quot;</span> <span class="ot">=</span> <span class="st">&quot;9000001844&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">create_config</span>(<span class="at">segments =</span> list_of_segments, <span class="at">create_directory =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="get-data-for-your-road-segments" class="section level4">
+<h4>4. Get data for your road segments</h4>
+<p>Once you have specified the names and IDs of your road segments, you
+can use the <code>retrieve_sensor()</code> function to gather data from
+this segment from the Telraam API. This function takes, as arguments,
+the name of the segment, the first and the last day of the period of
+interest. You must use the same names as specified in the configuration
+files and dates must be of the date type.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">retrieve_sensor</span>(<span class="at">segment_name =</span> <span class="st">&quot;segment-01&quot;</span>, </span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>                <span class="at">start_date =</span> <span class="fu">as.Date</span>(<span class="st">&#39;2023-09-01&#39;</span>), </span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                <span class="at">end_date =</span> <span class="fu">as.Date</span>(<span class="st">&#39;2023-09-30&#39;</span>))</span></code></pre></div>
+<p>If you want to store the data, you can directly use
+<code>write_update_data()</code>, which performs the same task but also
+writes or updates the sensor data in a temporary folder or in the
+<code>data/</code> directory in .Rdata format. The arguments are the
+same as those of the previous function:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">write_update_data</span>(<span class="at">segment_name =</span> <span class="st">&quot;segment-01&quot;</span>,</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>                  <span class="at">start_date =</span> <span class="fu">as.Date</span>(<span class="st">&#39;2023-09-01&#39;</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                  <span class="at">end_date =</span> <span class="fu">as.Date</span>(<span class="st">&#39;2023-09-30&#39;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                  <span class="at">create_directory =</span> <span class="cn">FALSE</span>) <span class="co">#TRUE if you want to save the data in a permanent folder</span></span></code></pre></div>
+<p>To retrieve data you have already stored, you can use
+<code>import_sensor()</code>. This function imports data associated with
+a given list of sensor names from .RData files contained in the
+<code>data/</code> directory. Here, you should also use the same names
+as specified in the configuration files. All available periods will be
+imported.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">import_sensor</span>(<span class="at">list_sensor =</span> <span class="fu">c</span>(<span class="st">&quot;segment-01&quot;</span>,<span class="st">&quot;segment-02&quot;</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="data-details" class="section level3">
+<h3>Data details</h3>
+<p>By importing data from your own road segments (following the previous
+steps) or using the included dataset, you should obtain Telraam data
+with the same columns. Among these columns, the most important ones
+are:</p>
+<ul>
+<li><em>segment_id</em> : Telraam ID of the road segment ;</li>
+<li><em>date</em> : date and UTC time of the reporting interval
+(beginning of the interval) ;</li>
+<li><em>interval</em> : can be “hourly” or “daily” for hourly or daily
+aggregate data ;</li>
+<li><em>uptime</em> : between 0 and 1, represents the portion of the
+reporting interval that was actively spent counting the traffic. For
+more information about the uptime parameter, you can refer to <a href="https://telraam.net/en/blog/precision-accuracy-and-validations-of-the-original-telraam-sensor">this
+Telraam article</a> ;</li>
+<li><em>heavy, heavy_lft, heavy_rgt</em> : number of heavy vehicles,
+total and in both directions. You have also the same columns for each
+transportation mode (<em>car, bike, pedestrian</em>) ;</li>
+<li><em>car_speed_hist_0to70plus, car_speed_hist_0to120plus</em> : the
+estimated car speed distribution in 10 km/h bins from 0 to 70+ km/h or
+120+ km/h (in percentage) ;</li>
+<li><em>v85</em> : estimated car speed limit in km/h that 85% of all
+cars respect.</li>
+</ul>
+<p>Complete data description can be found in the data documentation of
+this package, or you can refer to the <a href="https://telraam-api.net/">Telraam API website</a> for further
+details.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
